@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@mipmap/main_title"
+        android:orientation="horizontal"></LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView14"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="词典设置"
+                android:textAlignment="center"
+                android:textColor="@android:color/black"
+                android:textSize="30sp" />
+
+            <TextView
+                android:id="@+id/textView15"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="显示模式"
+                android:textColor="@android:color/black"
+                android:textSize="18sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RadioGroup
+                    android:id="@+id/settings_display"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:checkedButton="@+id/settings_display1"
+                    android:padding="10dp">
+
+                    <RadioButton
+                        android:id="@+id/settings_display1"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:layout_weight="1.5"
+                        android:background="@mipmap/display1"
+                        android:paddingLeft="30dp" />
+
+                    <RadioButton
+                        android:id="@+id/settings_display2"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:layout_weight="1.5"
+                        android:background="@mipmap/display2" />
+
+                    <RadioButton
+                        android:id="@+id/settings_display3"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:layout_weight="1.5"
+                        android:background="@mipmap/display3"
+                        />
+
+                </RadioGroup>
+
+            </LinearLayout>
+
+            <Switch
+                android:id="@+id/settings_music"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="音乐开关"
+                android:textSize="18sp" />
+
+            <Button
+                android:id="@+id/reset"
+                style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="Warning: 数据库初始化"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/textView17"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="   将会恢复到初始数据库状态，所有新数据将丢失" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
