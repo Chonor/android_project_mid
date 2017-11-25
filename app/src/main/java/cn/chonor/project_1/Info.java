@@ -23,6 +23,8 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
@@ -45,11 +47,12 @@ public class Info extends AppCompatActivity {
     private TextView info_date=null;
     private TextView info_place=null;
     private TextView info_other=null;
+    private TextView info_add=null;
     private View decorView;
     private float downX, downY;
     private float screenWidth, screenHeight;
     private boolean Is_change=false;
-    private boolean Change=true;
+    private boolean Change=true,Add=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,14 +61,11 @@ public class Info extends AppCompatActivity {
         Receive_Data();
         Init();
         Set_Data();
+        //不允许在搜索界面修改
         if(Change)Init_Listener();
-        else{ backs.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Return_no_change();
-            }
-        });}
+        else Init_Listener_Search();
     }
+    //初始化
     private void Init(){
         imageView=(ImageView)findViewById(R.id.info_image);
         backs=(ImageView)findViewById(R.id.info_back);
@@ -82,6 +82,7 @@ public class Info extends AppCompatActivity {
         info_date=(TextView)findViewById(R.id.info_date);
         info_place=(TextView)findViewById(R.id.info_place);
         info_other=(TextView)findViewById(R.id.info_other);
+        info_add=(TextView)findViewById(R.id.info_add_main);
         ////////////
 
         decorView = getWindow().getDecorView();
@@ -91,16 +92,36 @@ public class Info extends AppCompatActivity {
         screenWidth = metrics.widthPixels;
         screenHeight = metrics.heightPixels;
     }
+    //数据设置
     private void Set_Data(){
-        imageView.setImageBitmap(data.getBitmap());
+        if(data.getCache()==0)Glide.with(this).load(data.getUrl()).into(imageView);
+        else imageView.setImageBitmap(data.getBitmap());
         country.setImageBitmap(data.getCountry_image(Info.this));
         info_name.setText(data.getName());
         info_sex.setText(data.getSex()==1?"男":"女");
         info_date.setText(data.getBoth_and_Dead());
         info_place.setText(data.getPlace());
         info_other.setText(data.getInfo());
+        info_add.setVisibility(View.INVISIBLE);
     }
-
+    //搜索界面的信息监听
+    private void Init_Listener_Search(){
+        info_add.setVisibility(View.VISIBLE);
+        backs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(Add)Return_change();
+                else Return_no_change();
+            }
+        });
+        info_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Add=true;
+                Toast.makeText(Info.this,"成功添加",Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
     private void Init_Listener(){//点击事件监听
          /*Jy*/
         imageView.setOnLongClickListener(new View.OnLongClickListener() {
@@ -122,6 +143,7 @@ public class Info extends AppCompatActivity {
                             intent.setType("image/*");
                             startActivityForResult(intent, IMAGE);
                         }
+                        data.setCache(1);
                         Is_change=true;
                     }
                 });
@@ -136,6 +158,7 @@ public class Info extends AppCompatActivity {
                 return true;
             }
         });
+        //返回按钮根据是否修改返回
         backs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -143,6 +166,7 @@ public class Info extends AppCompatActivity {
                 else Return_no_change();
             }
         });
+        //国别选择
         country.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
@@ -169,6 +193,7 @@ public class Info extends AppCompatActivity {
                 return true;
             }
         });
+        //修改名字
         info_name.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
@@ -201,7 +226,7 @@ public class Info extends AppCompatActivity {
                 return true;
             }
         });
-
+        //修改性别
         info_sex.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
@@ -232,20 +257,21 @@ public class Info extends AppCompatActivity {
                 return true;
             }
         });
-
+        //修改生卒
         info_date.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                //final EditText input_text=new EditText(MainActivity.instance_tempthis);
+                //自定义界面
                 final View view_birth_dead= LayoutInflater.from(Info.this).inflate(R.layout.alertdialog_birth_dead,null);
                 final NumberPicker birth = (NumberPicker)view_birth_dead.findViewById(R.id.alertdialog_birth);
                 final NumberPicker dead = (NumberPicker)view_birth_dead.findViewById(R.id.alertdialog_dead);
                 birth.setMinValue(0);
                 dead.setMinValue(0);
-                birth.setMaxValue(400);
-                dead.setMaxValue(400);
+                birth.setMaxValue(1600);
+                dead.setMaxValue(1600);
                 birth.setValue(data.getBoth());
                 dead.setValue(data.getDead());//当前值
+                //控制生<卒
                 birth.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
                     @Override
                     public void onValueChange(NumberPicker numberPicker, int i, int i1) {
@@ -285,7 +311,7 @@ public class Info extends AppCompatActivity {
                 return true;
             }
         });
-
+        //修改籍贯
         info_place.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
@@ -318,7 +344,7 @@ public class Info extends AppCompatActivity {
                 return true;
             }
         });
-
+        //修改历史信息
         info_other.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
@@ -349,21 +375,21 @@ public class Info extends AppCompatActivity {
         });
     }
 
-
+    //数据接收
     private void Receive_Data(){
         Bundle extras = getIntent().getBundleExtra("mainActivity");
         if(extras!=null){
             data= databaseHelper.Select(extras.getInt("id"));
             Change=true;
         }
-        else{
+        else{//在所搜索界面不允许信息修改
             extras = getIntent().getBundleExtra("Search");
             data= databaseHelper.Select(extras.getInt("id"));
             Change=false;
         }
     }
     private void Return_change(){//修改了信息调用这个
-        databaseHelper.Updatas(data);
+        if(!Add)databaseHelper.Updatas(data);
         Intent i = new Intent(Info.this, Main.class);
         Bundle bundle = new Bundle();
         bundle.putBoolean("is_change",true);
@@ -380,6 +406,7 @@ public class Info extends AppCompatActivity {
         setResult(RESULT_OK,i);
         finish();
     }
+    //调用相机or相册
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAMERA && resultCode == RESULT_OK) {
@@ -406,7 +433,7 @@ public class Info extends AppCompatActivity {
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
-
+    //滑动返回
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if(event.getAction() == MotionEvent.ACTION_DOWN){// 当按下时

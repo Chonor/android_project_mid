@@ -29,18 +29,18 @@
                 android:id="@+id/item_name"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:layout_weight="1"
+                android:layout_weight="0.1"
                 android:paddingLeft="10dp"
                 android:text="TextView"
                 android:textColor="@android:color/black"
-                android:textSize="30sp" />
+                android:textSize="25sp" />
 
             <ImageView
                 android:id="@+id/item_country"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
-                android:layout_weight="1"
-                app:srcCompat="@android:color/transparent" />
+                android:layout_weight="0.9"
+                app:srcCompat="@mipmap/other" />
         </LinearLayout>
 
         <LinearLayout
@@ -77,7 +77,7 @@
             android:paddingLeft="10dp"
             android:text="籍贯："
             android:textColor="@android:color/black"
-            android:textSize="20sp" />
+            android:textSize="18sp" />
 
     </LinearLayout>
 

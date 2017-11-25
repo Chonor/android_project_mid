@@ -1,6 +1,8 @@
 package cn.chonor.project_1;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseArray;
 import android.util.SparseBooleanArray;
@@ -10,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,8 +27,7 @@ public class CommonAdapter extends RecyclerView.Adapter<CommonAdapter.ViewHolder
     private List<Data> mDatas;
     private int mLayoutId;
     private int choose=0;
-    private static int COMMENT_FIRST=1;
-    private static int COMMENT_SECOND=2;
+
     //构造函数
     public CommonAdapter(Context mContext,int mLayoutId,List<Data>mDatas,int choose) {
         this.mLayoutId=mLayoutId;
@@ -58,7 +61,8 @@ public class CommonAdapter extends RecyclerView.Adapter<CommonAdapter.ViewHolder
         }
     }
     public void convert(ViewHolder viewHolder, Data data) {
-        if(choose==0) {
+
+        if(choose==0) {//显示界面1
             ImageView imageView = viewHolder.getView(R.id.item_image);
             ImageView country = viewHolder.getView(R.id.item_country);
             TextView name = viewHolder.getView(R.id.item_name);
@@ -66,7 +70,9 @@ public class CommonAdapter extends RecyclerView.Adapter<CommonAdapter.ViewHolder
             TextView both_dead = viewHolder.getView(R.id.item_date);
             TextView place = viewHolder.getView(R.id.item_place);
             TextView choose = viewHolder.getView(R.id.item_choose);
-            imageView.setImageBitmap(data.getBitmap());
+            //本地无缓存使用url获取
+            if(data.getCache()==0) Glide.with(mContext).load(data.getUrl()).into(imageView);
+            else imageView.setImageBitmap(data.getBitmap());
             name.setText(data.getName());
             choose.setText("");
             if (data.getSex() == 1) sex.setText("男");
@@ -76,22 +82,27 @@ public class CommonAdapter extends RecyclerView.Adapter<CommonAdapter.ViewHolder
             country.setImageBitmap(data.getCountry_image(mContext));
 
         }
-        else if(choose==1){
+        else if(choose==1){//界面2
             ImageView imageView = viewHolder.getView(R.id.item1_image);
             ImageView country = viewHolder.getView(R.id.item1_country);
             ImageView choose = viewHolder.getView(R.id.item1_choose);
             TextView name = viewHolder.getView(R.id.item1_name);
-            imageView.setImageBitmap(data.getBitmap());
+            Glide.with(mContext).load(data.getUrl()).into(imageView);
+            //本地无缓存使用url获取
+            if(data.getCache()==0)Glide.with(mContext).load(data.getUrl()).into(imageView);
+            else imageView.setImageBitmap(data.getBitmap());
             name.setText(data.getName());
             country.setImageBitmap(data.getCountry_image(mContext));
             choose.setVisibility(View.INVISIBLE);
         }
-        else {
+        else {//界面3
             ImageView imageView = viewHolder.getView(R.id.item2_image);
             ImageView country = viewHolder.getView(R.id.item2_country);
             ImageView choose = viewHolder.getView(R.id.item2_choose);
             TextView name = viewHolder.getView(R.id.item2_name);
-            imageView.setImageBitmap(data.getBitmap());
+            //本地无缓存使用url获取
+            if(data.getCache()==0)Glide.with(mContext).load(data.getUrl()).into(imageView);
+            else imageView.setImageBitmap(data.getBitmap());
             name.setText(data.getName());
             country.setImageBitmap(data.getCountry_image(mContext));
             choose.setVisibility(View.INVISIBLE);

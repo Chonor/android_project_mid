@@ -15,13 +15,27 @@ import java.util.Date;
  * Created by Chonor on 2017/11/14.
  */
 
+/**
+ * name 存储名字
+ * place 存储籍贯
+ * info 存储历史信息
+ * url 存储头像网址
+ * sex 存储性别 1:男 0：女
+ * both dead 存储生卒
+ * id 数据库中位置
+ * country 势力 0为其他 1：魏 2：蜀 3：吴
+ * bitmap 存放图片
+ */
+
 public class Data  implements Parcelable {
-    private String name,place,info;
-    private int sex,both,dead,id,country;
+
+    private String name,place,info,url;
+    private int sex,both,dead,id,country,cache;
     private Bitmap bitmap;
     public Data(){
 
     }
+    //构造
     public Data(String name,String place,String info,int sex,int country,int both,int dead,Bitmap bitmap){
         this.name=name;
         this.place=place;
@@ -31,7 +45,9 @@ public class Data  implements Parcelable {
         this.both=both;
         this.dead=dead;
         this.bitmap=bitmap;
+        this.cache=0;
     }
+    //构造
     public Data(Data data){
         this.id=data.id;
         this.name= data.name;
@@ -42,7 +58,10 @@ public class Data  implements Parcelable {
         this.both= data.both;
         this.dead= data.dead;
         this.bitmap=data.bitmap;
+        this.url=data.url;
+        this.cache=data.cache;
     }
+    public void setUrl(String url){this.url=url;}
     public void setId(int id){
         this.id=id;
     }
@@ -63,7 +82,7 @@ public class Data  implements Parcelable {
         this.both=both;
         this.dead=dead;
     }
-    public void setBitmap(Bitmap bitmap){
+    public void setBitmap(Bitmap bitmap){//顺带裁剪
         int width = bitmap.getWidth();
         int height = bitmap.getHeight();
         float scaleWidth = ((float) 200) / width;
@@ -73,7 +92,11 @@ public class Data  implements Parcelable {
         // 得到新的图片
         this.bitmap=Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
     }
-
+    public void setCache(int cache){this.cache=cache>0?1:0;}
+    public void setbyte(byte[] in){
+        setBitmap(BitmapFactory.decodeByteArray(in, 0, in.length));
+    }
+    public String getUrl(){return url;}
     public String getName(){
         return name;
     }
@@ -113,9 +136,14 @@ public class Data  implements Parcelable {
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
         return baos.toByteArray();
     }
-    public void setbyte(byte[] in){
-       setBitmap(BitmapFactory.decodeByteArray(in, 0, in.length));
-    }
+    public int getCache(){return  cache;}
+
+
+
+
+
+
+    ////无视这个部分，这个是使用 Parcelable进行数据传输，使用数据库之后不需要
     @Override
     public int describeContents() {
         return 8;
@@ -130,7 +158,6 @@ public class Data  implements Parcelable {
         parcel.writeInt(both);
         parcel.writeInt(dead);
         parcel.writeInt(id);
-
        // parcel.writeByteArray(getbyte());
     }
     public static final Parcelable.Creator<Data> CREATOR =new Parcelable.Creator<Data>() {
@@ -155,4 +182,5 @@ public class Data  implements Parcelable {
             return new Data[size];
         }
     };
+    ///////////////////////////////////////////////////////////////////////////////////////
 }

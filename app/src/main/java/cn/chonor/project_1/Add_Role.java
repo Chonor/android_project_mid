@@ -77,9 +77,11 @@ public class Add_Role extends AppCompatActivity  {
         Init();
         Init_Listener();
     }
+    //初始化
     private void Init(){
         imageView=(ImageView)findViewById(R.id.add_image);
         backs=(ImageView)findViewById(R.id.add_back);
+        //测量图片宽高，用于限制拍照和相册图片。
         int i = View.MeasureSpec.makeMeasureSpec(0, 0);
         int j = View.MeasureSpec.makeMeasureSpec(0, 0);
         imageView.measure(i,j);
@@ -102,8 +104,9 @@ public class Add_Role extends AppCompatActivity  {
         add_wu=(RadioButton)findViewById(R.id.add_wu);
         add_other=(RadioButton)findViewById(R.id.add_other);
         add_button=(Button)findViewById(R.id.add_button);
+        //设置生卒选择
         Set_NumberPickers();
-
+        //设置滑动返回
         decorView = getWindow().getDecorView();
         // 获得手机屏幕的宽度和高度，单位像素
         DisplayMetrics metrics = new DisplayMetrics();
@@ -111,6 +114,7 @@ public class Add_Role extends AppCompatActivity  {
         screenWidth = metrics.widthPixels;
         screenHeight = metrics.heightPixels;
     }
+    //生卒numberpicker 设置
     private void Set_NumberPickers(){
         choose_country=0;
         choose_sex=0;
@@ -125,8 +129,9 @@ public class Add_Role extends AppCompatActivity  {
         add_both.setValue(choose_both);
         add_dead.setValue(choose_dead);//当前值
     }
-
+    //点击事件监听
     private void Init_Listener(){
+        //点击图片进行拍照or相册选择
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -158,13 +163,14 @@ public class Add_Role extends AppCompatActivity  {
                 alertDialogBuilder.create().show();
             }
         });
+        //返回按钮监听
         backs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Returns_null();
             }
         });
-
+        //性别选择监听
         add_sex.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {
@@ -174,6 +180,7 @@ public class Add_Role extends AppCompatActivity  {
                     choose_sex=0;
             }
         });
+        //势力选择监听
         add_country.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {
@@ -183,6 +190,7 @@ public class Add_Role extends AppCompatActivity  {
                 else if(add_wu.getId()==i)choose_country=3;
             }
         });
+        //名字输入不能为空，为空提示错误
         input_name.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -205,6 +213,7 @@ public class Add_Role extends AppCompatActivity  {
                 }
             }
         });
+        //籍贯输入不能为空,为空报错
         input_place.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -229,35 +238,35 @@ public class Add_Role extends AppCompatActivity  {
             }
         });
 
-
+        //生卒选择监听
         add_both.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker numberPicker, int i, int i1) {
                 choose_both=i1;
-                if(i1>choose_dead){
+                if(i1>choose_dead){//出生<死亡
                     choose_dead=choose_both;
                     add_dead.setValue(choose_dead);
                 }
-                //data.setBoth_and_Dead(choose_both,choose_dead);
             }
         });
+        //生卒选择监听
         add_dead.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker numberPicker, int i, int i1) {
                 choose_dead=i1;
-                if(choose_both>choose_dead){
+                if(choose_both>choose_dead){//出生<死亡
                     choose_both=choose_dead;
                     add_both.setValue(choose_both);
                 }
-                //data.setBoth_and_Dead(choose_both,choose_dead);
             }
         });
+        //添加按钮
         add_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(input_name.getText().length()!=0&&input_place.getText().length()!=0){
+                if(input_name.getText().length()!=0&&input_place.getText().length()!=0){//输入控制
                     Returns_Add_new();
-                }else{
+                }else{//提示
                     add_place.setErrorEnabled(true);
                     add_place.setError("籍贯不可为空");
                     add_name.setErrorEnabled(true);
@@ -276,6 +285,7 @@ public class Add_Role extends AppCompatActivity  {
         data.setBoth_and_Dead(choose_both,choose_dead);
         data.setInfo(add_info.getText().toString());
         data.setBitmap(((BitmapDrawable) imageView.getDrawable()).getBitmap());
+        data.setCache(1);
         Intent i = new Intent(Add_Role.this, Main.class);
         Bundle bundle = new Bundle();
         bundle.putBoolean("is_add",true);
@@ -292,6 +302,7 @@ public class Add_Role extends AppCompatActivity  {
         setResult(RESULT_OK,i);
         finish();
     }
+    //调用相机相册数据返回
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAMERA && resultCode == RESULT_OK) {
@@ -317,7 +328,7 @@ public class Add_Role extends AppCompatActivity  {
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
-
+    //右滑退出
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if(event.getAction() == MotionEvent.ACTION_DOWN){// 当按下时

@@ -118,15 +118,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
-                            android:checkedButton="@+id/search_all_country"
+                            android:checkedButton="@+id/search_wei"
                             android:orientation="horizontal">
-
-                            <RadioButton
-                                android:id="@+id/search_all_country"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="0.67"
-                                android:text="所有" />
 
                             <RadioButton
                                 android:id="@+id/search_wei"
@@ -148,6 +141,13 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="吴" />
+
+                            <RadioButton
+                                android:id="@+id/search_all_country"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.67"
+                                android:text="其他" />
                         </RadioGroup>
                     </LinearLayout>
 
@@ -287,7 +287,7 @@
 
                         <Button
                             android:id="@+id/reset"
-                            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                            style="@style/Widget.AppCompat.Button.Colored"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:padding="10dp"
