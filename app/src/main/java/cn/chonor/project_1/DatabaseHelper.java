@@ -14,7 +14,7 @@ import java.util.ArrayList;
  */
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static final String name = "INFO.db";
+    private static final String name = "Project_Data.db";
     private static final int version = 1; //数据库版本
 
     public DatabaseHelper(Context context) {
@@ -23,7 +23,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        Create_role();
+
     }
 
     @Override

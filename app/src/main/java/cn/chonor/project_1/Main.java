@@ -100,6 +100,7 @@ public class Main extends AppCompatActivity {
     //数据库操作
     private void Load_Database(){
         if(!databaseHelper.tabIsExist("role")){//总数据库
+            databaseHelper.getWritableDatabase();
             databaseHelper.Create_role();
             Read_Write_Data();
         }
