@@ -11,7 +11,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme.customeTheme">
         <activity android:name=".Main">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,7 +22,13 @@
         <activity android:name=".Add_Role" android:theme="@style/translucent"/>
         <activity android:name=".Info" android:theme="@style/translucent"/>
         <activity android:name=".MainActivityGame"/>
-        <activity android:name=".Hand_and_Dust"/>
+        <activity android:name=".Hand_and_Dust">
+            <intent-filter>
+                <action android:name="android.intent.action.Hand_and_Dust"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
         <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     </application>
 

@@ -133,6 +133,7 @@ public class Main extends AppCompatActivity {
         edit=(TextView)findViewById(R.id.main_edit);
         main_add=(ImageView)findViewById(R.id.main_add);
 
+
         searchView=(SearchView)findViewById(R.id.main_search);
         searchView.setSubmitButtonEnabled(true);
 

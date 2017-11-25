@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+
     </style>
     <style name="translucent" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -14,5 +15,8 @@
         <item name="android:windowBackground">@color/translucent</item>
         <item name="android:colorBackgroundCacheHint">@null</item>
         <item name="android:windowIsTranslucent">true</item>
+    </style>
+    <style name="AppTheme.customeTheme" parent="AppTheme">
+        <item name="android:windowBackground">@mipmap/load</item>
     </style>
 </resources>

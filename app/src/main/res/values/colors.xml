@@ -6,4 +6,5 @@
     <color name="translucent">#00000000</color>
     <color name="half">#7fffffff</color>
     <color name="myred">#FF0000</color>
+    <color name="whites">#FFFFFF</color>
 </resources>
