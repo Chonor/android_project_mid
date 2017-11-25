@@ -31,6 +31,7 @@ import android.widget.Toast;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Random;
 
 /**
  * Created by Chonor on 2017/11/17.
@@ -40,6 +41,7 @@ public class Add_Role extends AppCompatActivity  {
     DatabaseHelper databaseHelper = new DatabaseHelper(this);
     private static final int CAMERA = 1;
     private static final int IMAGE = 2;
+    private static final int GAME = 10;
     private Data data=new Data();
     private LayoutParams para = null;
     private int height=0,width=0;
@@ -76,6 +78,7 @@ public class Add_Role extends AppCompatActivity  {
         setContentView(R.layout.add);
         Init();
         Init_Listener();
+
     }
     //初始化
     private void Init(){
@@ -135,7 +138,7 @@ public class Add_Role extends AppCompatActivity  {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final String[] Items={"拍摄","从相册选择"};
+                final String[] Items={"拍摄","从相册选择","来一局紧张刺激的昆特牌吧"};
                 AlertDialog.Builder alertDialogBuilder=new AlertDialog.Builder(Add_Role.this);
                 alertDialogBuilder .setIcon(android.R.drawable.ic_dialog_info);
                 alertDialogBuilder.setTitle("选择图片");
@@ -146,10 +149,13 @@ public class Add_Role extends AppCompatActivity  {
                         if(i==0){//额外 打开相机
                             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                             startActivityForResult(intent, CAMERA);
-                        }else {//额外 打开相册
+                        }else if(i==1){//额外 打开相册
                             Intent intent = new Intent(Intent.ACTION_PICK);
                             intent.setType("image/*");
                             startActivityForResult(intent, IMAGE);
+                        }else
+                        {
+                            GoGame();
                         }
                     }
                 });
@@ -178,6 +184,7 @@ public class Add_Role extends AppCompatActivity  {
                     choose_sex=1;
                 else if (add_woman.getId() == i)
                     choose_sex=0;
+                Rand_GoGame();
             }
         });
         //势力选择监听
@@ -188,6 +195,7 @@ public class Add_Role extends AppCompatActivity  {
                 else if(add_wei.getId()==i)choose_country=1;
                 else if(add_shu.getId()==i)choose_country=2;
                 else if(add_wu.getId()==i)choose_country=3;
+                Rand_GoGame();
             }
         });
         //名字输入不能为空，为空提示错误
@@ -328,6 +336,32 @@ public class Add_Role extends AppCompatActivity  {
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
+    private void GoGame(){
+        Intent intent = new Intent(Add_Role.this,MainActivityGame.class);
+        startActivityForResult(intent, GAME);
+    }
+    private void Rand_GoGame(){
+        Random rand = new Random();
+        if(rand.nextInt(100)>49) {
+            android.app.AlertDialog.Builder alertDialogBuilder=new android.app.AlertDialog.Builder(Add_Role.this);
+            alertDialogBuilder.setTitle("来一局紧张刺激的昆特牌吧！")
+                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            GoGame();
+                        }
+                    })
+                    .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                        }
+                    })
+                    .setCancelable(true)
+                    .create().show();
+        }
+    }
+
+
     //右滑退出
     @Override
     public boolean onTouchEvent(MotionEvent event) {

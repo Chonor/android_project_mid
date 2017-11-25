@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/descrciption_text"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="40dp"
+        android:text="一小局游戏中，双方轮流出卡，一回合一张，一方无卡可出或者主动放弃该局后该局不允许再出卡。\n双方均结束该局时结算力量点数，点数大者该局获胜，三局两胜。"
+        android:textSize="25dp"
+        android:textColor="#2F2F4F"
+        />
+    <ImageView
+        android:id="@+id/descrciption_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/deciription"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/descrciption_text"
+        android:layout_marginTop="50dp"
+        />
+
+
+</android.support.constraint.ConstraintLayout>

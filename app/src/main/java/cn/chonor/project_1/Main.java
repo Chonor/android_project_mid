@@ -390,7 +390,7 @@ public class Main extends AppCompatActivity {
                     alertDialogBuilder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            databaseHelper.Delete(datas.get(position));
+                            databaseHelper.Delete_main(datas.get(position).getId());
                             datas.remove(position);
                             commonAdapter.notifyDataSetChanged();
                         }

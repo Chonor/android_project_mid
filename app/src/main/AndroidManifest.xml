@@ -21,6 +21,20 @@
         </activity>
         <activity android:name=".Add_Role" android:theme="@style/translucent"/>
         <activity android:name=".Info" android:theme="@style/translucent"/>
+        <activity android:name=".MainActivityGame">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".Hand_and_Dust">
+            <intent-filter>
+                <action android:name="android.intent.action.Hand_and_Dust"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
         <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     </application>
 

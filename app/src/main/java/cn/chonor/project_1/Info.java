@@ -27,6 +27,7 @@ import com.bumptech.glide.Glide;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Random;
 
 /**
  * Created by Chonor on 2017/11/17.
@@ -36,6 +37,7 @@ public class Info extends AppCompatActivity {
     DatabaseHelper databaseHelper = new DatabaseHelper(this);
     private static final int CAMERA = 1;
     private static final int IMAGE = 2;
+    private static final int GAME = 10;
     private Data data=new Data();
     private LayoutParams para = null;
     private int height=0,width=0;
@@ -119,6 +121,7 @@ public class Info extends AppCompatActivity {
             public void onClick(View view) {
                 Add=true;
                 Toast.makeText(Info.this,"成功添加",Toast.LENGTH_SHORT).show();
+                Rand_GoGame();
             }
         });
     }
@@ -127,7 +130,7 @@ public class Info extends AppCompatActivity {
         imageView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                final String[] Items={"拍摄","从相册选择"};
+                final String[] Items={"拍摄","从相册选择","来一局紧张刺激的昆特牌吧"};
                 AlertDialog.Builder alertDialogBuilder=new AlertDialog.Builder(Info.this);
                 alertDialogBuilder.setIcon(android.R.drawable.ic_dialog_info);
                 alertDialogBuilder.setTitle("选择图片");
@@ -138,13 +141,14 @@ public class Info extends AppCompatActivity {
                         if(i==0){//额外 打开相机
                             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                             startActivityForResult(intent, CAMERA);
-                        }else {//额外 打开相册
+                        }else if(i==1){//额外 打开相册
                             Intent intent = new Intent(Intent.ACTION_PICK);
                             intent.setType("image/*");
                             startActivityForResult(intent, IMAGE);
                         }
-                        data.setCache(1);
-                        Is_change=true;
+                        else{
+                            GoGame();
+                        }
                     }
                 });
                 alertDialogBuilder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -170,16 +174,21 @@ public class Info extends AppCompatActivity {
         country.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                final String[] Items={"魏","蜀","吴","其他"};
+                final String[] Items={"魏","蜀","吴","其他","来一局紧张刺激的昆特牌吧"};
                 AlertDialog.Builder alertDialogBuilder=new AlertDialog.Builder(Info.this);
                 alertDialogBuilder.setIcon(android.R.drawable.ic_dialog_info);
                 alertDialogBuilder.setTitle("更改势力");
                 alertDialogBuilder.setItems(Items,new DialogInterface.OnClickListener(){
                     @Override   //使用setItems构建选择列表 并增加点击检测
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        data.setCountry((i+1)%4);
-                        country.setImageBitmap(data.getCountry_image(Info.this));
-                        Is_change=true;
+                        if(i<4) {
+                            data.setCountry((i + 1) % 4);
+                            country.setImageBitmap(data.getCountry_image(Info.this));
+                            Is_change = true;
+                        }
+                        else {
+                            GoGame();
+                        }
                     }
                 });
                 alertDialogBuilder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -212,6 +221,7 @@ public class Info extends AppCompatActivity {
                                     data.setName(Input_text);
                                     info_name.setText(Input_text);
                                     Is_change=true;
+                                    Rand_GoGame();
                                 }
                             }
                         })
@@ -219,6 +229,7 @@ public class Info extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 Toast.makeText(getApplicationContext(),"修改取消",Toast.LENGTH_LONG).show();
+                                Rand_GoGame();
                             }
                         })
                         .setCancelable(true)
@@ -230,26 +241,36 @@ public class Info extends AppCompatActivity {
         info_sex.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                final String[] Items={"男","女"};
+                final String[] Items={"男","女","来一局紧张刺激的昆特牌吧"};
                 AlertDialog.Builder alertDialogBuilder=new AlertDialog.Builder(Info.this);
                 alertDialogBuilder.setTitle("请选择性别：")
                         .setIcon(android.R.drawable.ic_dialog_info)
                         .setItems(Items,new DialogInterface.OnClickListener(){
                             @Override   //使用setItems构建选择列表 并增加点击检测
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                if(i==0)
+                                if(i==0) {
                                     data.setSex(1);
-                                else
+                                    Toast.makeText(Info.this, "性别修改为："+Items[i], Toast.LENGTH_SHORT).show();
+                                    info_sex.setText(Items[i]);
+                                    Is_change=true;
+                                }
+                                else if(i==1) {
                                     data.setSex(0);
-                                Toast.makeText(Info.this, "性别修改为："+Items[i], Toast.LENGTH_SHORT).show();
-                                info_sex.setText(Items[i]);
-                                Is_change=true;
+                                    Toast.makeText(Info.this, "性别修改为：" + Items[i], Toast.LENGTH_SHORT).show();
+                                    info_sex.setText(Items[i]);
+                                    Is_change = true;
+                                }
+                                else {
+                                    GoGame();
+                                }
+
                             }
                         })
                         .setNegativeButton("取消", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 Toast.makeText(getApplicationContext(),"修改取消",Toast.LENGTH_LONG).show();
+                                Rand_GoGame();
                             }
                         })
                         .setCancelable(true)
@@ -298,11 +319,13 @@ public class Info extends AppCompatActivity {
                                 data.setBoth_and_Dead(birth.getValue(),dead.getValue());
                                 info_date.setText(data.getBoth_and_Dead());
                                 Is_change=true;
+                                Rand_GoGame();
                             }
                         })
                         .setNegativeButton("取消", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
+                                Rand_GoGame();
                                 Toast.makeText(getApplicationContext(),"修改取消",Toast.LENGTH_LONG).show();
                             }
                         })
@@ -336,6 +359,7 @@ public class Info extends AppCompatActivity {
                         .setNegativeButton("取消", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
+                                Rand_GoGame();
                                 Toast.makeText(getApplicationContext(),"修改取消",Toast.LENGTH_LONG).show();
                             }
                         })
@@ -360,11 +384,13 @@ public class Info extends AppCompatActivity {
                                 data.setInfo(Input_text);
                                 info_other.setText(Input_text);
                                 Is_change=true;
+                                Rand_GoGame();
                             }
                         })
                         .setNegativeButton("取消", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
+                                Rand_GoGame();
                                 Toast.makeText(getApplicationContext(),"修改取消",Toast.LENGTH_LONG).show();
                             }
                         })
@@ -417,6 +443,8 @@ public class Info extends AppCompatActivity {
             para.height = height;
             para.width = width;
             imageView.setLayoutParams(para);
+            this.data.setCache(1);
+            Is_change=true;
         }else if(requestCode == IMAGE && resultCode == RESULT_OK){
             try { //此处提示需要捕获异常 所以加了
                 InputStream inputStream = getContentResolver().openInputStream(data.getData());
@@ -427,12 +455,40 @@ public class Info extends AppCompatActivity {
                 para.height = height;
                 para.width = width;
                 imageView.setLayoutParams(para);
+                this.data.setCache(1);
+                Is_change=true;
             }catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
+
+    private void GoGame(){
+        Intent intent = new Intent(Info.this,MainActivityGame.class);
+        startActivityForResult(intent, GAME);
+    }
+    private void Rand_GoGame(){
+        Random rand = new Random();
+        if(rand.nextInt(100)>49) {
+            AlertDialog.Builder alertDialogBuilder=new AlertDialog.Builder(Info.this);
+            alertDialogBuilder.setTitle("来一局紧张刺激的昆特牌吧！")
+                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            GoGame();
+                        }
+                    })
+                    .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                        }
+                    })
+                    .setCancelable(true)
+                    .create().show();
+        }
+    }
+
     //滑动返回
     @Override
     public boolean onTouchEvent(MotionEvent event) {
